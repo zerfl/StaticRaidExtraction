@@ -163,6 +163,18 @@ DWORD WINAPI Run(HMODULE hModule)
 		std::cout << "Error! CSharpAssembly not found!\n";
 	}
 
+	try {
+		if (il2cppi_is_initialized(JsonMain__TypeInfo) && il2cppi_is_initialized(SharedModelManager__TypeInfo)) {
+			auto staticData = (*SharedModelManager__TypeInfo)->static_fields->StaticData;
+			auto staticString = app::JsonMain_ToJsonStr((Object*)staticData, true, nullptr);
+			std::ofstream outfile("static_data.json");
+			outfile << il2cppi_to_string(staticString) << std::endl;
+			outfile.close();
+		}
+
+	}
+	catch (Il2CppExceptionWrapper& e) {}
+
 	Il2CppClass* AppModelKlass = il2cpp_class_from_name(CSharpAssembly->image, "Client.Model", "AppModel");
 	FieldInfo* instance = il2cpp_class_get_field_from_name(AppModelKlass, "_instance");
 
@@ -171,9 +183,10 @@ DWORD WINAPI Run(HMODULE hModule)
 
 	app::AppModel* InGameInst = (app::AppModel*)(InGameInstAddr);
 
+
 	const MethodInfo* m = il2cpp_class_get_method_from_name(AppModelKlass, "get_StaticData", 0);
-	auto data = AppModel_get_StaticData(InGameInst, (MethodInfo*)m);
-	
+	ClientStaticData* data = AppModel_get_StaticData(InGameInst, (MethodInfo*)m);
+
 	app::StaticHeroData* staticHeroData = data->fields._.HeroData;
 	app::List_1_SharedModel_Meta_Heroes_HeroType_* heroTypes = staticHeroData->fields.HeroTypes;
 
