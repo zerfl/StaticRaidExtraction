@@ -183,9 +183,34 @@ DWORD WINAPI Run(HMODULE hModule)
 
 	app::AppModel* InGameInst = (app::AppModel*)(InGameInstAddr);
 
-
 	const MethodInfo* m = il2cpp_class_get_method_from_name(AppModelKlass, "get_StaticData", 0);
 	ClientStaticData* data = AppModel_get_StaticData(InGameInst, (MethodInfo*)m);
+
+	try {
+		if (il2cppi_is_initialized(JsonMain__TypeInfo) && il2cppi_is_initialized(AppModel__TypeInfo)) {
+			const MethodInfo* m = il2cpp_class_get_method_from_name(AppModelKlass, "ReadUser", 0);
+			UserReadGuard* user = AppModel_ReadUser(InGameInst, (MethodInfo*)m);
+			
+
+			
+			auto appModelString = app::JsonMain_ToJsonStr((Object*)user, true, nullptr);
+			std::ofstream outfile("appmodel_user_data.json");
+
+			std::cout
+				<< "0x"
+				<< std::hex
+				<< std::noshowbase
+				<< std::setw(16)
+				<< std::setfill('0')
+				<< user
+				<< std::endl;
+
+			outfile << il2cppi_to_string(appModelString) << std::endl;
+			outfile.close();
+		}
+
+	}
+	catch (Il2CppExceptionWrapper& e) {}
 
 	app::StaticHeroData* staticHeroData = data->fields._.HeroData;
 	app::List_1_SharedModel_Meta_Heroes_HeroType_* heroTypes = staticHeroData->fields.HeroTypes;
