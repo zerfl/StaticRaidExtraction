@@ -189,7 +189,12 @@ DWORD WINAPI Run(HMODULE hModule)
 	try {
 		if (il2cppi_is_initialized(JsonMain__TypeInfo) && il2cppi_is_initialized(AppModel__TypeInfo)) {
 			const MethodInfo* m = il2cpp_class_get_method_from_name(AppModelKlass, "ReadUser", 0);
-			UserReadGuard* user = AppModel_ReadUser(InGameInst, (MethodInfo*)m);
+
+			Nullable_1_Int32___Boxed* timeOut = (Nullable_1_Int32___Boxed*) il2cpp_object_new((Il2CppClass*) *Nullable_1_Int32___TypeInfo);
+			Nullable_1_Int32___ctor(timeOut, 0, nullptr);
+			auto timeOutValue = il2cpp_value_box((Il2CppClass*)*Nullable_1_Int32___TypeInfo, &timeOut);
+
+			UserReadGuard* user = AppModel_ReadUser(InGameInst, *(Nullable_1_Int32_*)timeOutValue, (MethodInfo*)m);
 			
 
 			
