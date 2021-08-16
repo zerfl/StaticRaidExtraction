@@ -45,7 +45,6 @@ std::string il2cppi_to_string(Il2CppString* str) {
 
 // Helper function to convert System.String to std::string
 std::string il2cppi_to_string(app::String* str) {
-    std::u16string u16(reinterpret_cast<const char16_t*>(&str->fields.m_firstChar));
-    return std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(u16);
+    return il2cppi_to_string(reinterpret_cast<Il2CppString*>(str));
 }
 #endif

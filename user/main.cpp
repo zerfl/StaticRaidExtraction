@@ -2,7 +2,7 @@
 // Custom injected code entry point
 #include "pch-il2cpp.h"
 
-
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <iostream>
@@ -10,6 +10,7 @@
 #include "helpers.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include "magic_enum.hpp"
 
 using namespace app;
 using json = nlohmann::ordered_json;
@@ -87,63 +88,20 @@ void to_json(json& j, const JsonHero& h) {
 	};
 }
 
-const std::map<int, std::string> elementLookup = {
-	{1, "Magic"},
-	{2, "Force"},
-	{3, "Spirit"},
-	{4, "Void"}
-};
-
-const std::map<int, std::string> roleLookup = {
-	{0, "Attack"},
-	{1, "Defense"},
-	{2, "Health"},
-	{3, "Support"},
-	{4, "Evolve"},
-	{5, "Xp"},
-};
-
-const std::map<int, std::string> rarityLookup = {
-	{1, "Common"},
-	{2, "Uncommon"},
-	{3, "Rare"},
-	{4, "Epic"},
-	{5, "Legendary"},
-};
-
-const std::map<int, std::string> fractionLookup = {
-	{0, "Unknown"},
-	{1, "BannerLords"},
-	{2, "HighElves"},
-	{3, "SacredOrder"},
-	{4, "CovenOfMagi"},
-	{5, "OgrynTribes"},
-	{6, "LizardMen"},
-	{7, "Skinwalkers"},
-	{8, "Orcs"},
-	{9, "Demonspawn"},
-	{10, "UndeadHordes"},
-	{11, "DarkElves"},
-	{12, "KnightsRevenant"},
-	{13, "Barbarians"},
-	{14, "NyresanElves"},
-	{15, "Samurai"},
-	{16, "Dwarves"},
-};
 
 DWORD WINAPI Run(HMODULE hModule)
 {
 	// If you would like to write to a log file, specify the name above and use il2cppi_log_write()
-	// il2cppi_log_write("Startup");
+	il2cppi_log_write("Startup");
 
 	// If you would like to output to a new console window, use il2cppi_new_console() to open one and redirect stdout
-	// il2cppi_new_console();
+	il2cppi_new_console();
 	il2cpp_thread_attach(il2cpp_domain_get());
 
 
-	AllocConsole();
-	FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);
+	//AllocConsole();
+	//FILE* f;
+	//freopen_s(&f, "CONOUT$", "w", stdout);
 
 	Il2CppDomain* domain = il2cpp_domain_get();
 	size_t size = 0;
@@ -246,10 +204,11 @@ DWORD WINAPI Run(HMODULE hModule)
 		auto heroName = il2cppi_to_string(heroType->fields.Name->fields.DefaultValue);
 
 		JsonHero hero;
-		hero.Fraction = fractionLookup.find(heroType->fields.Fraction)->second;
-		hero.Rarity = rarityLookup.find(heroType->fields.Rarity)->second;
-		hero.Role = roleLookup.find(heroType->fields.Role)->second;
-		hero.Element = elementLookup.find(heroType->fields.Element)->second;
+		hero.Fraction = magic_enum::enum_name(heroType->fields.Fraction);
+		hero.Rarity = magic_enum::enum_name(heroType->fields.Rarity);
+		hero.Role = magic_enum::enum_name(heroType->fields.Role);
+		hero.Element = magic_enum::enum_name(heroType->fields.Element);
+		
 		hero.SummonWeight = heroType->fields.SummonWeight;
 		hero.IsLocationOnly = heroType->fields.IsLocationOnly;
 		hero.Id = heroType->fields.Id;
@@ -298,9 +257,9 @@ DWORD WINAPI Run(HMODULE hModule)
 		::Sleep(100);
 
 	}
-	fclose(f);
+	/*fclose(f);
 	FreeConsole();
-	FreeLibraryAndExitThread(hModule, 0);
+	FreeLibraryAndExitThread(hModule, 0);*/
 
 	return 0;
 }

@@ -51,6 +51,9 @@
     <ClInclude Include="framework\pch-il2cpp.h">
       <Filter>framework</Filter>
     </ClInclude>
+    <ClInclude Include="user\magic_enum.hpp">
+      <Filter>user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="appdata">
