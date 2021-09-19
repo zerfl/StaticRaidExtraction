@@ -8,6 +8,7 @@
 #define PCH_IL2CPP_H
 
 // add headers that you want to pre-compile here
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #include "il2cpp-appdata.h"
 
 #endif //PCH_IL2CPP_H

@@ -2,7 +2,6 @@
 // Custom injected code entry point
 #include "pch-il2cpp.h"
 
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <iostream>
@@ -202,6 +201,7 @@ DWORD WINAPI Run(HMODULE hModule)
 
 		auto avatarName = il2cppi_to_string(heroType->fields.AvatarName);
 		auto heroName = il2cppi_to_string(heroType->fields.Name->fields.DefaultValue);
+		auto heroNameKey = il2cppi_to_string(heroType->fields.Name->fields.Key);
 
 		JsonHero hero;
 		hero.Fraction = magic_enum::enum_name(heroType->fields.Fraction);
